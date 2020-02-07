@@ -21,15 +21,22 @@ export default class App extends Component {
       name,
       number
     };
-    checkOnExist
-      ? alert(`${name} is already in contacts`)
-      : checkLength(`${name}`) || checkLength(`${number}`)
-      ? alert("Please, fill in all required entry fields")
-      : this.setState(prevState => {
-          return {
-            contacts: [...prevState.contacts, contact]
-          };
-        });
+
+    if (checkLength(`${name}`) || checkLength(`${number}`)) {
+      alert("Please, fill in all required entry fields");
+      return;
+    }
+
+    if (checkOnExist) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+
+    this.setState(prevState => {
+      return {
+        contacts: [...prevState.contacts, contact]
+      };
+    });
   };
 
   removeContact = contactId => {
@@ -58,7 +65,7 @@ export default class App extends Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm contacts={filteredContacts} addContact={this.addContact} />
+        <ContactForm addContact={this.addContact} />
         <h2>Contacts</h2>
         {contacts.length >= 2 && (
           <Filter value={filter} onChangeFilter={this.changeFilter} />
